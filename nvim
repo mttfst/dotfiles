@@ -89,3 +89,10 @@ augroup whitespace
   autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
+
+" highlight yanked lines a seconds"
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 1000})
+augroup END
+
