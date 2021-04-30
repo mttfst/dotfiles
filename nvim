@@ -45,6 +45,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'lervag/vimtex'
 Plug 'mbbill/undotree'
 
+Plug 'ajh17/VimCompletesMe'
+
 call plug#end()
 
 
@@ -139,3 +141,12 @@ augroup vimtex_common
     autocmd FileType tex call SetServerName()
 augroup END
 
+
+augroup VimCompletesMeTex
+  autocmd!
+  autocmd FileType tex
+      \ let b:vcm_omni_pattern = g:vimtex#re#neocomplete
+augroup END
+
+" no new line when hit enter in completion list"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
