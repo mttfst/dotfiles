@@ -38,6 +38,15 @@ set scrolloff=8
 
 " extra column on the left for signals from whatever
 set signcolumn=yes
+
+" Declare the list of plugins.
+call plug#begin('~/.vim/plugged')
+
+Plug 'lervag/vimtex'
+
+call plug#end()
+
+
 " remaps
 let mapleader = " "
 
@@ -65,6 +74,19 @@ inoremap <C-h> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
+
+
+" VimTex settings"
+nnoremap <leader>toc :VimtexTocToggle <CR> :wincmd h <CR>
+nnoremap <leader>tv :VimtexView <CR>
+nnoremap <leader>tc :VimtexCompile <CR>
+let g:vimtex_view_method = 'skim'
+let g:vimtex_compiler_progname='nvr'
+let g:vimtex_grammar_textidote = {
+            \ 'jar': '~/.vim/textiode/textidote.jar',
+            \ 'args': '--output singleline --check en_UK',
+            \}
+
 
 " source vimrc"
 nnoremap <leader>svrc :source ~/.config/nvim/init.vim <CR>
@@ -94,5 +116,22 @@ augroup END
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 1000})
+augroup END
+
+
+
+function! SetServerName()
+  if has('win32')
+    let nvim_server_file = $TEMP . "/curnvimserver.txt"
+  else
+    let nvim_server_file = "/tmp/curnvimserver.txt"
+  endif
+  let cmd = printf("echo %s > %s", v:servername, nvim_server_file)
+  call system(cmd)
+endfunction
+
+augroup vimtex_common
+    autocmd!
+    autocmd FileType tex call SetServerName()
 augroup END
 
