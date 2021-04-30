@@ -69,3 +69,10 @@ inoremap <C-l> <Right>
 " source vimrc"
 nnoremap <leader>svrc :source ~/.config/nvim/init.vim <CR>
 
+
+" toggle to absolute numbers in insert mode
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
