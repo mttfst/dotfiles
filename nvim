@@ -1,0 +1,40 @@
+set path+=**
+set wildmenu
+
+" Tab options
+set tabstop=4 softtabstop=4
+set shiftwidth=4
+set expandtab
+set smartindent
+
+" Line numbers
+set number relativenumber
+
+" source prject vimrc's
+set exrc
+
+" search results don't stay hightlighted
+set nohlsearch
+
+" keep buffers open
+set hidden
+
+set noerrorbells
+
+" case sensitive search when a cap letter is used
+set smartcase
+
+" history
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+
+" highlight on searching
+set incsearch
+
+" start scroll before last line
+set scrolloff=8
+
+" extra column on the left for signals from whatever
+set signcolumn=yes
