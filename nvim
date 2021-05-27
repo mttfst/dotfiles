@@ -7,13 +7,17 @@ set shiftwidth=4
 set expandtab
 set smartindent
 
+" split settings
+set splitright
+set splitbelow
+
 " Line numbers
 set number relativenumber
 
-" source prject vimrc's
+" source project vimrc's
 set exrc
 
-" search results don't stay hightlighted
+" search results don't stay highlighted
 set nohlsearch
 
 " keep buffers open
