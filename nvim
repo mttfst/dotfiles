@@ -109,7 +109,7 @@ nnoremap <leader>u :UndotreeToggle<CR>
 
 
 " VimTex settings"
-nnoremap <leader>toc :VimtexTocToggle <CR> :wincmd h <CR>
+nnoremap <leader>to :VimtexTocToggle <CR> :wincmd h <CR>
 nnoremap <leader>tv :VimtexView <CR>
 nnoremap <leader>tc :VimtexCompile <CR>
 let g:vimtex_view_method = 'skim'
