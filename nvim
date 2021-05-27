@@ -40,6 +40,10 @@ set incsearch
 " start scroll before last line
 set scrolloff=8
 
+" decrease update time (suggestion from vimtricks for fluent git gutter)
+" default = 4000
+set updatetime=1000
+
 " extra column on the left for signals from whatever
 set signcolumn=yes
 
@@ -47,6 +51,8 @@ set signcolumn=yes
 call plug#begin('~/.vim/plugged')
 
 Plug 'lervag/vimtex'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'mbbill/undotree'
 
 Plug 'ajh17/VimCompletesMe'
