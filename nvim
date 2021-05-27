@@ -141,6 +141,14 @@ nnoremap <leader>sn :call FixLastSpellingError('n')<cr>
 
 nnoremap <leader>sc ea<C-X><C-S>
 
+" add empty line above and below the cursor
+function! MakeVspace()
+    normal! mmO
+    normal! jo
+    normal! `m"
+endfunction
+nnoremap <leader><cr> :call MakeVspace()<cr>
+
 " telescope settings"
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
