@@ -47,6 +47,14 @@ set updatetime=1000
 " extra column on the left for signals from whatever
 set signcolumn=yes
 
+" spell settings
+set spelllang=en_gb
+set complete+=kspell
+hi SpellBad   ctermbg=none cterm=underline ctermfg=203 " guifg=#ff5f5f
+hi SpellLocal ctermbg=none cterm=underline ctermfg=303 guifg=#ff5f5f
+hi SpellRare  ctermbg=none cterm=underline " ctermfg=203 guifg=#ff5f5f
+hi SpellCap   ctermbg=none cterm=underline " ctermfg=203 guifg=#ff5f5f
+
 " Declare the list of plugins.
 call plug#begin('~/.vim/plugged')
 
@@ -114,6 +122,23 @@ let g:vimtex_grammar_textidote = {
 
 " source vimrc"
 nnoremap <leader>svrc :source ~/.config/nvim/init.vim <CR>
+" open vimrc
+nnoremap <leader>vrc :e ~/.config/nvim/init.vim <cr>
+
+" fix spelling errors
+function! FixLastSpellingError(np)
+   if a:np == 'p'
+      normal! mm[s1z=`m"
+      echom a:np
+  elseif a:np == 'n'
+      normal! ]s1z=
+      echom a:np
+  endif
+endfunction
+nnoremap <leader>sp :call FixLastSpellingError('p')<cr>
+nnoremap <leader>sn :call FixLastSpellingError('n')<cr>
+
+nnoremap <leader>sc ea<C-X><C-S>
 
 " telescope settings"
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
@@ -177,3 +202,18 @@ augroup END
 
 " no new line when hit enter in completion list"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+augroup filestypes
+  autocmd!
+
+  autocmd BufNewFile,BufRead *.css.erb,*.spriter setfiletype css
+  autocmd BufNewFile,BufRead *.mkd,*.md,*.markdown setfiletype markdown
+  autocmd BufNewFile,BufRead *.json setfiletype javascript
+  autocmd BufNewFile,BufRead *.ejs,*.hbs setfiletype html
+
+  autocmd Filetype python setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd Filetype make,automake setlocal noexpandtab
+
+  autocmd Filetype markdown,tex setlocal spell textwidth=80
+  autocmd Filetype gitcommit,mail setlocal spell textwidth=76 colorcolumn=77
+augroup END
