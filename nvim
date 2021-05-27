@@ -158,6 +158,9 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fv <cmd>Telescope grep_string<cr>
 
 
+" Esc to exit terminal-mode
+tnoremap <Esc> <C-\><C-n>
+
 
 " toggle to absolute numbers in insert mode
 augroup numbertoggle
