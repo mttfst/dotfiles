@@ -120,8 +120,9 @@ let g:vimtex_grammar_textidote = {
             \}
 
 
-" source vimrc"
-nnoremap <leader>svrc :source ~/.config/nvim/init.vim <CR>
+" source current file
+nnoremap <leader>sop :w<CR>:source %<CR>
+
 " open vimrc
 nnoremap <leader>vrc :e ~/.config/nvim/init.vim <cr>
 
