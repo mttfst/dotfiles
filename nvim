@@ -64,6 +64,8 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'tpope/vim-commentary'
 
+Plug 'tpope/vim-surround'
+
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
