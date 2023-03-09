@@ -57,21 +57,42 @@ hi SpellCap   ctermbg=none cterm=underline " ctermfg=203 guifg=#ff5f5f
 
 " Declare the list of plugins.
 call plug#begin('~/.vim/plugged')
-
+" latex plugin
 Plug 'lervag/vimtex'
+
+" git plugins
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
+" comment out things
 Plug 'tpope/vim-commentary'
 
+" Telescope and its dependencies
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 
+" Harpoon
+Plug 'ThePrimeagen/harpoon'
+
+" Undotree
 Plug 'mbbill/undotree'
 
+" auto complet
 Plug 'ajh17/VimCompletesMe'
+
+" Vim game
+Plug 'ThePrimeagen/vim-be-good'
+
+" track keystrokes
+Plug 'ThePrimeagen/vim-apm'
+
+" exchange things
+Plug 'tommcdo/vim-exchange'
+
+Plug 'tpope/vim-surround'
+
 
 call plug#end()
 
@@ -84,6 +105,7 @@ map <leader>h :wincmd h<CR>
 map <leader>j :wincmd j<CR>
 map <leader>k :wincmd k<CR>
 map <leader>l :wincmd l<CR>
+
 " resize window"
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
@@ -104,9 +126,33 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 
+" reselect pasted text
+nnoremap gp `[v`]
+
 " undotree settings"
 nnoremap <leader>u :UndotreeToggle<CR>
 
+" copy to clipbord and past from clipbord
+vnoremap <leader>cc "*y
+" vnoremap <leader>cc :!xclip -f -sel clip
+nnoremap <leader>vv "*gp
+
+
+
+fun! ToggleGit()
+
+    for bnr in  range(1, bufnr('$'))
+        let gitwin = 0
+        if getbufvar(bnr,'current_syntax') == 'fugitive'
+            exe "bd" . bnr
+            return
+        endif
+    endfor
+
+    exe 'G'
+
+endfun
+nnoremap <Leader>g :call ToggleGit() <CR>
 
 " VimTex settings"
 nnoremap <leader>to :VimtexTocToggle <CR> :wincmd h <CR>
@@ -157,9 +203,19 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fv <cmd>Telescope grep_string<cr>
 
+" disable arrow keys?
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" disable  spacebar in normal mode
+nnoremap <Space> <Nop>
 
 " Esc to exit terminal-mode
 tnoremap <Esc> <C-\><C-n>
+
+nnoremap <leader>wm :w <cr> :make<cr>
 
 
 " toggle to absolute numbers in insert mode
@@ -224,8 +280,17 @@ augroup filestypes
   autocmd BufNewFile,BufRead *.ejs,*.hbs setfiletype html
 
   autocmd Filetype python setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd Filetype fortran setlocal tabstop=2 softtabstop=2 shiftwidth=2
   autocmd Filetype make,automake setlocal noexpandtab
 
   autocmd Filetype markdown,tex setlocal spell textwidth=80
   autocmd Filetype gitcommit,mail setlocal spell textwidth=76 colorcolumn=77
 augroup END
+
+" set make command
+set makeprg=./make.sh\ pcosmus_GF
+" set makeprg=./make.sh\ pcosmo_GF
+" set makeprg=./make.sh\ dustonly_GF
+" set makeprg=python\ landuse.py\ test.domain
+" set makeprg=python\ soil.py\ domains/test.domain
+
