@@ -47,6 +47,9 @@ set updatetime=1000
 " extra column on the left for signals from whatever
 set signcolumn=yes
 
+" set fzf as fuzzy finder
+set rtp+=/usr/local/opt/fzf
+
 " spell settings
 set spelllang=en_gb
 set complete+=kspell
@@ -70,10 +73,23 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 
 Plug 'mbbill/undotree'
 
 Plug 'ajh17/VimCompletesMe'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'preservim/vim-pencil'
+" Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'preservim/vim-wheel'
+Plug 'tommcdo/vim-exchange'
+
+Plug 'stevearc/vim-arduino'
+Plug 'mechatroner/rainbow_csv'
 
 call plug#end()
 
@@ -86,6 +102,10 @@ map <leader>h :wincmd h<CR>
 map <leader>j :wincmd j<CR>
 map <leader>k :wincmd k<CR>
 map <leader>l :wincmd l<CR>
+
+" " quick quit"
+" nnoremap <leader>qq :q<CR>
+
 " resize window"
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
@@ -100,14 +120,30 @@ nnoremap <Leader>wl <C-w>L
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" In insert or command mode, move normally by using Ctrl
-inoremap <C-h> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
+" " In insert or command mode, move normally by using Ctrl
+" inoremap <C-h> <Left>
+" inoremap <C-j> <Down>
+" inoremap <C-k> <Up>
+" inoremap <C-l> <Right>
 
 " undotree settings"
 nnoremap <leader>u :UndotreeToggle<CR>
+
+" reselect pasted text
+nnoremap gp `[v`]
+
+" copy to clipbord and past from clipbord
+vnoremap <leader>cc "*y
+vnoremap <leader>vv "*gp
+nnoremap <leader>vv "*gp
+
+" yank to comment ygc
+function! Yankcomment()
+    normal! yy
+    normal! gcc
+    normal! p
+endfunction
+nnoremap  ygc :call Yankcomment()<cr>
 
 
 " VimTex settings"
@@ -126,7 +162,7 @@ let g:vimtex_grammar_textidote = {
 nnoremap <leader>sop :w<CR>:source %<CR>
 
 " open vimrc
-nnoremap <leader>vrc :e ~/.config/nvim/init.vim <cr>
+nnoremap <leader>vrc :e ~/project/dotfiles/nvim <cr>
 
 " fix spelling errors
 function! FixLastSpellingError(np)
@@ -151,9 +187,13 @@ function! MakeVspace()
 endfunction
 nnoremap <leader><cr> :call MakeVspace()<cr>
 
+" put next sentece in a new line
+nnoremap <leader>nl )i<cr><esc>
+
 " telescope settings"
 nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>bb <cmd>Telescope file_browser<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -163,6 +203,23 @@ nnoremap <leader>fv <cmd>Telescope grep_string<cr>
 " Esc to exit terminal-mode
 tnoremap <Esc> <C-\><C-n>
 
+
+" vim-airline settings"
+let g:airline_powerline_fonts = 1
+" my_file.ino [arduino:avr:uno] [arduino:usbtinyisp] (/dev/ttyACM0:9600)
+function! ArduinoStatusLine()
+  let port = arduino#GetPort()
+  let line = '[' . g:arduino_board . '] [' . g:arduino_programmer . ']'
+  if !empty(port)
+    let line = line . ' (' . port . ':' . g:arduino_serial_baud . ')'
+  endif
+  return line
+endfunction
+augroup ArduinoStatusLine
+  autocmd! * <buffer>
+  " autocmd BufWinEnter <buffer> setlocal stl=%f\ %h%w%m%r\ %{ArduinoStatusLine()}\ %=\ %(%l,%c%V\ %=\ %P%)
+  " autocmd BufNewFile,BufRead *.ino let g:airline_section_x='%{ArduinoStatusLine()}'
+augroup END
 
 " toggle to absolute numbers in insert mode
 augroup numbertoggle
@@ -184,12 +241,14 @@ augroup whitespace
 augroup END
 
 
-" highlight yanked lines a seconds"
+" " open help windows always on the right
+" autocmd FileType help wincmd L
+
+" highlight yanked lines for a second"
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 1000})
 augroup END
-
 
 
 function! SetServerName()
@@ -226,8 +285,51 @@ augroup filestypes
   autocmd BufNewFile,BufRead *.ejs,*.hbs setfiletype html
 
   autocmd Filetype python setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd Filetype fortran setlocal tabstop=2 softtabstop=2 shiftwidth=2
   autocmd Filetype make,automake setlocal noexpandtab
 
-  autocmd Filetype markdown,tex setlocal spell textwidth=80
+  autocmd Filetype markdown,tex,txt setlocal spell " textwidth=90
   autocmd Filetype gitcommit,mail setlocal spell textwidth=76 colorcolumn=77
+
+  autocmd FileType tex let b:surround_109 = "\\(\r\\)"
+  autocmd FileType tex let b:surround_118 = "\\vec{\r}"
+  autocmd FileType tex let b:surround_86 = "\\var{\r}"
+  autocmd FileType tex let b:surround_117 = "\\unit{\r}"
 augroup END
+
+" goyo and limelight
+let g:goyo_width = 100
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+let g:limelight_conceal_ctermfg = 'gray'
+
+function! EnterGoyo()
+  Goyo
+"  Limelight
+endfunction
+
+nnoremap <leader>g :call EnterGoyo()<cr>
+
+" " fotran insert mode remap
+" inoremap if IF
+" inoremap and .AND.
+" inoremap print PRINT*,
+
+" latex shortcuts
+" insert citep
+nnoremap <leader>ic i\citep{}<esc>i
+
+" newline normal mode
+nnoremap <leader>o o<esc>
+nnoremap <leader>O O<esc>
+
+" insert math
+nnoremap <leader>mm i\(\)<esc>hi
+
+" suround shortcuts
+" math
+nnoremap <leader>sm ysiwm
+
+
+" close all buffers
+command! BufOnly execute '%bdelete!|edit #|normal `"'
