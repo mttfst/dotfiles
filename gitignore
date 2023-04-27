@@ -26,4 +26,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-*.test
+# Ignore
+neovim/.config/nvim/plugin/packer_compiled.lua
+
