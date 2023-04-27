@@ -654,6 +654,17 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
+		<key>0x6b-0x100000-0x28</key>
+		<dict>
+			<key>Action</key>
+			<integer>13</integer>
+			<key>Label</key>
+			<string></string>
+			<key>Text</key>
+			<string></string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 		<key>0x6e-0x100000</key>
 		<dict>
 			<key>Action</key>
@@ -789,6 +800,8 @@
 		<dict>
 			<key>ASCII Anti Aliased</key>
 			<true/>
+			<key>ASCII Ligatures</key>
+			<false/>
 			<key>Ambiguous Double Width</key>
 			<false/>
 			<key>Ansi 0 Color</key>
@@ -1364,9 +1377,11 @@
 			<key>Name</key>
 			<string>active</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 12</string>
+			<string>ArialMT 18</string>
 			<key>Non-ASCII Anti Aliased</key>
-			<true/>
+			<false/>
+			<key>Non-ASCII Ligatures</key>
+			<false/>
 			<key>Normal Font</key>
 			<string>MesloLGSNerdFontCompleteM-Regular 18</string>
 			<key>Only The Default BG Color Uses Transparency</key>
@@ -1402,6 +1417,8 @@
 				<real>0.43789717555046082</real>
 			</dict>
 			<key>Send Code When Idle</key>
+			<false/>
+			<key>Set Local Environment Vars</key>
 			<false/>
 			<key>Shortcut</key>
 			<string></string>
