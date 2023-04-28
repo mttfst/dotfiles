@@ -20,6 +20,8 @@ return require('packer').startup(function(use)
 
   use( 'tpope/vim-fugitive' )
 
+  use( 'mbbill/undotree' )
+
 
   end)
 
