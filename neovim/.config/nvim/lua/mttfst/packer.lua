@@ -1,4 +1,5 @@
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
+-- print('Hallo from Packer')
 
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
