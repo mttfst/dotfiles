@@ -1,15 +1,23 @@
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+    lsp.default_keymaps({ buffer = bufnr })
 end)
 
 lsp.ensure_installed({
-  -- Replace these with whatever servers you want to install
-  'fortls',
-  'ltex',
-  'pyre',
-  'lua_ls'
+    -- Replace these with whatever servers you want to install
+    'fortls',
+    'ltex',
+    'pylsp',
+    'lua_ls',
+    'bashls'
+})
+
+lsp.format_on_save({
+    servers = {
+        ['pylsp'] = { 'python' },
+        ['lua_ls'] = { 'lua' },
+    }
 })
 
 
