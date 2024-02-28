@@ -26,12 +26,23 @@ lsp.setup()
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
+manage_nvim_cmp = {
+    set_sources = 'lsp',
+    set_basic_mappings = true,
+    set_extra_mappings = false,
+    use_luasnip = true,
+    set_format = true,
+    documentation_window = true,
+}
+
 cmp.setup({
-  mapping = {
-    ['<Tab>'] = cmp_action.tab_complete(),
-    ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
-  }
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'path' },
+        { name = 'buffer' },
+    },
+    mapping = {
+        ['<Tab>'] = cmp_action.tab_complete(),
+        ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
+    }
 })
-
-
-
