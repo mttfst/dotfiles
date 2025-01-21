@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Ensure the script stops on errors
+set -e
+
+# Function to display usage information
+usage() {
+    echo "Usage: $0 [--prefix=/custom/prefix] <hash> <case_name>"
+    exit 1
+}
+
+# Check if SCRATCH is set
+if [ -z "$SCRATCH" ]; then
+    echo "Error: SCRATCH environment variable is not set."
+    echo "Please set SCRATCH to a valid directory path."
+    exit 1
+fi
+
+# Default prefix is based on SCRATCH
+prefix="${SCRATCH}/Pamore"
+
+# Parse arguments
+while [[ "$1" == --* ]]; do
+    case "$1" in
+        --prefix=*)
+            prefix="${1#--prefix=}"
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            ;;
+    esac
+    shift
+done
+
+# Check for required positional arguments
+if [ "$#" -ne 2 ]; then
+    usage
+fi
+
+# Read positional arguments
+hash="$1"
+case_name="$2"
+
+# Base URL
+base_url="https://download.dwd.de/pub/Pamore"
+
+# Define the output directory
+outdir="${prefix}/${case_name}"
+
+# Full URL to list from
+url="${base_url}/oflxd21.${hash}/"
+
+# Create output directory if it doesn't exist
+mkdir -p "${outdir}"
+
+# Temporary file to store file list
+filelist="${outdir}/filelist.txt"
+
+# Step 1: Get the list of .gz files from the URL
+wget -q -O - "${url}" | grep -oE 'href="[^"]+\.gz"' | sed 's/^href="//;s/"$//' > "${filelist}"
+
+# Step 2: Download files one by one and unpack them
+while IFS= read -r file; do
+    full_url="${url}${file}"
+    
+    # Download the file
+    wget -P "${outdir}" "${full_url}"
+    
+    # Start unpacking the file in the background
+    gzip -dq "${outdir}/${file}" &
+done < "${filelist}"
+
+# Wait for all background unpacking processes to complete
+wait
+
+echo "Data downloaded and unpacked into '${outdir}'."
+
