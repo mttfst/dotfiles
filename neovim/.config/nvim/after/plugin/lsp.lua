@@ -1,6 +1,11 @@
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+    -- disable tsserver formatting if using prettier
+    if client.name == "tsserver" then
+        client.server_capabilities.documentFormattingProvider = false
+    end
+
     lsp.default_keymaps({ buffer = bufnr })
 end)
 
@@ -10,13 +15,20 @@ lsp.ensure_installed({
     'ltex',
     'pylsp',
     'lua_ls',
-    'bashls'
+    'bashls',
+    'tsserver',
 })
 
+
 lsp.format_on_save({
+    format_opts = {
+        async = false,
+        timeout_ms = 1000,
+    },
     servers = {
         ['pylsp'] = { 'python' },
         ['lua_ls'] = { 'lua' },
+        ['null-ls'] = { 'typescript', 'javascript' },
     }
 })
 
@@ -46,3 +58,13 @@ cmp.setup({
         ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
     }
 })
+local mason_registry = require("mason-registry")
+
+local function ensure_installed(pkg)
+    if not mason_registry.is_installed(pkg) then
+        local p = mason_registry.get_package(pkg)
+        p:install()
+    end
+end
+
+ensure_installed("prettierd")
