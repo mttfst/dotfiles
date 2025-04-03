@@ -17,3 +17,4 @@ vim.keymap.set('', '<leader>l', ':wincmd l<CR>')
 
 
 vim.keymap.set('n', '<leader>wm', vim.cmd.make)
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { noremap = true, silent = true })
