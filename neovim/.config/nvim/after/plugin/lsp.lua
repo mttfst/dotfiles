@@ -58,6 +58,30 @@ cmp.setup({
         ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
     }
 })
+
+vim.diagnostic.config({
+    virtual_text = {
+        spacing = 4,
+        source = "if_many",
+    },
+    float = {
+        border = "rounded",
+        source = "always",
+    },
+    severity_sort = true,
+})
+
+vim.o.updatetime = 1000
+vim.api.nvim_create_autocmd("CursorHold", {
+    callback = function()
+        vim.diagnostic.open_float(nil, {
+            focusable = false,
+            border = "rounded",
+            source = "always"
+        })
+    end
+})
+
 local mason_registry = require("mason-registry")
 
 local function ensure_installed(pkg)
