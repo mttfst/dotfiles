@@ -2,7 +2,7 @@
 pool: main-quest
 status: open
 ---
-[[Projects]]
+[[01 Projects]]
 # Project Name
 **Goal:** ...
 **Status:** ...

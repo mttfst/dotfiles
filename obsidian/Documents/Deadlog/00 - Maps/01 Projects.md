@@ -1,5 +1,5 @@
-# Projekt Übersicht
 
+# Running Projects
 
 ```dataviewjs
 const POOLS = {
@@ -176,13 +176,16 @@ if (strayProjects.length) {
     strayProjects.map(p => {
       const s = p.status ? String(p.status).toLowerCase() : null;
       let problem;
-      if (!s)                               problem = "kein status";
+      if (!s)                               problem = "no status";
       else if (!KNOWN_STATUS.includes(s))   problem = `status: \`${p.status}\``;
-      else                                  problem = "open, aber kein pool";
+      else                                  problem = "open, but no pool";
       return [`[[${p.file.path}|${p.file.name}]]`, problem];
     })
   );
 }
+
+
+
 ```
 
 
