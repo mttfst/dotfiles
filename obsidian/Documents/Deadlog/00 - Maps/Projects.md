@@ -157,6 +157,32 @@ if (pausedProjects.length) {
     ])
   );
 }
+
+// --- ⚠️ Unklar (status/pool fehlt oder unbekannt) ---
+const KNOWN_STATUS = ["open", "waiting", "pause"];
+
+const strayProjects = dv.pages('"01 - Projects"')
+  .where(p => {
+    const s = p.status ? String(p.status).toLowerCase() : null;
+    const statusBad = !s || !KNOWN_STATUS.includes(s);
+    const poolBad = s === "open" && !p.pool;   // open braucht einen Pool
+    return statusBad || poolBad;
+  })
+  .array();
+
+if (strayProjects.length) {
+  dv.table(
+    ["⚠️ Unklar", "Problem"],
+    strayProjects.map(p => {
+      const s = p.status ? String(p.status).toLowerCase() : null;
+      let problem;
+      if (!s)                               problem = "kein status";
+      else if (!KNOWN_STATUS.includes(s))   problem = `status: \`${p.status}\``;
+      else                                  problem = "open, aber kein pool";
+      return [`[[${p.file.path}|${p.file.name}]]`, problem];
+    })
+  );
+}
 ```
 
 
